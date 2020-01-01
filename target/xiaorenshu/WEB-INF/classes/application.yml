@@ -1,0 +1,15 @@
+server:
+  port: 8088
+  servlet:
+    context-path: /xiaorenshu
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/et1610
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: haorongzhi
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database: mysql

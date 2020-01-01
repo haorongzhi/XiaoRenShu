@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="xiaorenshu:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>xiaorenshu</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="xiaorenshu.war">
+      <element id="artifact" artifact-name="xiaorenshu:war exploded" />
+    </root>
+  </artifact>
+</component>

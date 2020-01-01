@@ -1,9 +1,20 @@
 package com.hrz.util;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.util.CollectionUtils;
+
+import java.io.*;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
+import java.util.*;
 
 /**
  * @author Administrator
@@ -11,33 +22,49 @@ import java.io.IOException;
  */
 public class CsvUtil {
 
-     try {
-        BufferedReader reader = null;//换成你的文件名   
-        try {
-            reader = new BufferedReader(new FileReader("*.csv"));
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        try {
-            reader.readLine();//第一行信息，为标题信息，不用,如果需要，注释掉   
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        String line = null;
-        while(true){
-            try {
-                if (!((line=reader.readLine())!=null)) break;
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            String item[] = line.split(",");//CSV格式文件为逗号分隔符文件，这里根据逗号切分   
+   public static  List<CSVRecord> read(File file){
 
-            String last = item[item.length-1];//这就是你要的数据了   
-            //int value = Integer.parseInt(last);//如果是数值，可以转化为数值   
-            System.out.println(last);
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
+       try {
+           BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+//            FileReader filereader = new FileReader(csv);
+//            BufferedReader bufferedReader = new BufferedReader(filereader);
+           bufferedReader.readLine();// try-catch omitted
+           CSVFormat format = CSVFormat.DEFAULT.withDelimiter(',');
+           CSVParser parser = new CSVParser(bufferedReader, format);
+           List<CSVRecord> records = parser.getRecords();//跳过第一行所有行的记录
+           return records;
+
+       } catch (IOException e) {
+           System.out.print("please check your upload");
+           e.printStackTrace();
+           return null;
+       }
+
+   }
+
+   public static void write(File csv,List<String> lines){
+       BufferedWriter bw = null;
+       try{
+           bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(csv),"UTF-8"));
+           if(!CollectionUtils.isEmpty(lines)){
+               for(String line : lines){
+                   bw.write(line);
+                   bw.newLine();
+               }
+           }
+       }catch(Exception e){
+           e.printStackTrace();
+       }finally {
+           try{
+               if(null != bw){
+                   bw.close();
+               }
+           }catch (Exception e){
+               e.printStackTrace();
+           }
+
+       }
+
+   }
 
 }
